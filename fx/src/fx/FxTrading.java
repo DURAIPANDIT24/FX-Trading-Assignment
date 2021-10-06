@@ -8,90 +8,65 @@ package fx;
  *
  */
 import java.util.Scanner;
-
+import java.util.ArrayList;
+class Trade{
+    String name;
+    int amnt;
+    String rate;
+    String currencyPair;
+}
 public class FxTrading {
-	public static Scanner scanner = new Scanner(System.in);
-	   
-	public static void main(String[] args) {
-		
-		// TODO Auto-generated method stub
-		char close = '\0';
-		
-		System.out.println("Book Trade - 1 \nPrint Trades - 2 \nExit - 3");
-		BookTrade Book=new BookTrade();
-		
-		int userSelect=scanner.nextInt();
-		
-		do {
-		switch (userSelect){
-			case 1:{
-				Book.Book();
-				
-			}
-			case 2:
-			{
-				Book.printTrades();
-				
-			}
-			case 3:
-			{
-				System.out.println("Do you really want to exit (Y/N)");
-                close = scanner.next().charAt(0);  
-			}
-		}
-		}while(close == 'n'|| close == 'N');
-		
-		 System.out.println("Bye - have a good day");
-	}				
+ static ArrayList<Trade> arr=new ArrayList<Trade>();
+    static Double rateOfInterset_USDINR=66.00;
+    public static void main(String[] args) {
+        while(true){
+        Scanner scan=new Scanner(System.in);
+        System.out.println(" l Book Trade -1\n l Print Trades - 2\n l Exit - 3");
+        int option=scan.nextInt();
+        if(option==1){
+            Trade temp=new Trade();
+            System.out.println("Enter customer Name");
+            temp.name=scan.next();
+            scan.nextLine();
+            System.out.println("Enter Currency Pair");
+            temp.currencyPair=scan.next();
+            if(!temp.currencyPair.equals("USDINR")){
+                System.out.println("Invalid Input");
+            }
+            else{
+            System.out.println("Enter amount to transfer");
+            temp.amnt=scan.nextInt();
+            System.out.println("Do you want to get Rate");
+            temp.rate=scan.next();
+            scan.nextLine();
+            // System.out.println();
+            System.out.println("You are transferring INR"+(temp.amnt*rateOfInterset_USDINR)+"to "+temp.name);
+            System.out.println("Book/Cancel this trade?");
+            String book_cancel=scan.next();
+            if(book_cancel.equals("Book")){
+                arr.add(temp);
+                System.out.println("Trade for "+temp.currencyPair+" has been booked with rate"+rateOfInterset_USDINR+",The amount of Rs"+(temp.amnt*rateOfInterset_USDINR)+"will be transferred in 2 working days to "+temp.name);
+            }
+            else{
+                System.out.println("Trade is Canceled.");
+            }
+        }
+        }
+        else if(option==2){
+            System.out.println("TradeNo\tCurrencyPair\tCustomerName\tAmount\tRate");
+            for(int iterI=0;iterI<arr.size();iterI++){
+                Trade temp=arr.get(iterI);
+                System.out.println((iterI+1)+"\t\t"+temp.currencyPair+"\t\t"+temp.currencyPair+"\t\t"+(temp.amnt*rateOfInterset_USDINR)+"\t\t"+rateOfInterset_USDINR);
+            }
+        }
+        else{
+            System.out.println("Do you really want to exit (y/n)");
+            char opt=scan.next().charAt(0);
+            if(opt=='Y'){
+                System.out.println("Bye - have a good day");
+                break;
+            }
+        }
+    }
 }
-class BookTrade{
-		public static Scanner scanner = new Scanner(System.in);
-		public static final double getRate = 66.00;
-		public static String customerName="";
-		public static String currencyPair="";
-		public static double rupees;
-		public static String rate="";
-	    public BookTrade() {}
-	    public BookTrade(String name, String currencyPair, double rupees, String rate) {
-	        this.customerName = name;
-	        this.currencyPair = currencyPair;
-	        this.rupees = rupees;
-	        this.rate = rate;
-	    }
-	public static void Book() {
-		 	System.out.println("Enter customer Name");
-	        customerName = scanner.next();
-	        System.out.println("Enter Currency Pair");
-	        currencyPair = scanner.next();
-	        if((currencyPair.equals("USDINR")) || (currencyPair.equals("usdinr"))){
-	            System.out.println("Enter amount to transfer");
-	            long amountToTransfer = scanner.nextInt();
-	            convertUSDtoINR(amountToTransfer);
-	            System.out.println("Do you want to get Rate");
-	            rate = scanner.next();
-	            if (rate.equals("yes") || rate.equals("YES")){
-	              getRatePrint();
-	            }
-	        }
-	        System.out.println("\nBook/Cancel this trade?");
-	        System.out.println("1 : Book");
-	        System.out.println("2 : Cancel");
-	        int book = scanner.nextInt();
-	        switch (book) {
-	            case 1 : System.out.println("Trade for USDINR has been booked with rate " + getRate + ", The amount of Rs " + rupees + " will be transferred in 2 working days to " + customerName + ".");
-	            case 2 : System.out.println("Trade is Canceled.\n");
-	            default : System.out.println("Invalid Option!! Please Enter Correct Option...");
-	}
-}
-	public static void convertUSDtoINR(long amountToTransfer){
-	        rupees = amountToTransfer * getRate;
-	    }
-	public static  void getRatePrint(){
-	        System.out.println("You are transferring INR " + rupees + " to " + customerName);
-	    }
-
-	public static  void printTrades(){
-	        System.out.println(" TradeNo\t CurrencyPair\t CustomerName\t Amount\t\t\t Rate ");
-	        System.out.println("\t" + "1" + "\t\t\t" + currencyPair + "\t\t\t" + customerName + "\t\tINR" + rupees + "\t\t" + getRate);
-	    }
 }
